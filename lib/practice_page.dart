@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 enum PracticeState { ready, recording, paused }
 
 class PracticePage extends StatefulWidget {
-  const PracticePage({super.key});
+  final VoidCallback? onFinish;
+  
+  const PracticePage({super.key, this.onFinish});
 
   @override
   State<PracticePage> createState() => _PracticePageState();
@@ -27,14 +29,6 @@ class _PracticePageState extends State<PracticePage> {
     setState(() => _state = PracticeState.paused);
   }
 
-  void _stopAndReset() {
-    _timer?.cancel();
-    setState(() {
-      _seconds = 0;
-      _state = PracticeState.ready;
-    });
-  }
-
   String get _time {
     final m = (_seconds ~/ 60).toString().padLeft(2, '0');
     final s = (_seconds % 60).toString().padLeft(2, '0');
@@ -49,30 +43,25 @@ class _PracticePageState extends State<PracticePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.of(context).maybePop(),
-        ),
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
-            Text('Practice Session', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
-            SizedBox(height: 2),
-            Text('Record your speech to get instant feedback', style: TextStyle(color: Colors.grey, fontSize: 12)),
-          ],
-        ),
-      ),
-      backgroundColor: const Color(0xFFF0F0F3),
-      body: SafeArea(
+    return ColoredBox(
+      color: const Color(0xFFF0F0F3),
+      child: SafeArea(
+        bottom: false,
         child: Padding(
           padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
           child: Column(
             children: [
               const SizedBox(height: 6),
+              const Text(
+                'Practice Session',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 4),
+              const Text(
+                'Record your speech to get instant feedback',
+                style: TextStyle(color: Colors.grey, fontSize: 12),
+              ),
+              const SizedBox(height: 16),
               _recordCard(),
               const SizedBox(height: 16),
               Expanded(
@@ -123,9 +112,9 @@ class _PracticePageState extends State<PracticePage> {
             },
             child: CircleAvatar(
               radius: 42,
-              backgroundColor: isRecording ? Colors.redAccent : Colors.blue,
+              backgroundColor: isRecording ? Colors.redAccent : const Color(0xFF3F7CF4),
               child: Icon(
-                isRecording ? Icons.pause : Icons.mic,
+                isRecording ? Icons.pause : Icons.play_arrow,
                 color: Colors.white,
                 size: 36,
               ),
@@ -134,7 +123,7 @@ class _PracticePageState extends State<PracticePage> {
           const SizedBox(height: 14),
           Text(
             _state == PracticeState.ready
-                ? 'Ready to Record'
+                ? 'Tap to Start'
                 : _state == PracticeState.recording
                     ? 'Recording...'
                     : 'Paused',
@@ -143,7 +132,7 @@ class _PracticePageState extends State<PracticePage> {
           const SizedBox(height: 6),
           Text(
             _time,
-            style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.blue),
+            style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Color(0xFF3F7CF4)),
           ),
         ],
       ),
@@ -203,16 +192,13 @@ class _PracticePageState extends State<PracticePage> {
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           ),
           onPressed: () {
-            // stop and return
-            _stopAndReset();
-            Navigator.of(context).maybePop();
+            _timer?.cancel();
+            widget.onFinish?.call();
           },
-          child: const Text('Finish & View Results'),
+          child: const Text('Finish & View Results', style: TextStyle(color: Colors.white)),
         ),
       ),
     );
   }
 }
 
-// Helper builder exported for other files to push/open the practice page.
-Widget practicePageBuilder(BuildContext context) => const PracticePage();

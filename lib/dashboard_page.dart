@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ispeak/practice_page.dart' as practice_page;
 
 class DashBoardPage extends StatelessWidget {
   final VoidCallback? onStartPractice;
@@ -104,13 +103,7 @@ class DashBoardPage extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: InkWell(
-            onTap: () {
-          if (onStartPractice != null) {
-            onStartPractice!();
-          } else {
-            Navigator.of(context).push(MaterialPageRoute(builder: practice_page.practicePageBuilder));
-          }
-        },
+        onTap: onStartPractice,
         borderRadius: BorderRadius.circular(16),
         child: Container(
           width: double.infinity,
@@ -128,7 +121,7 @@ class DashBoardPage extends StatelessWidget {
               const CircleAvatar(
                 radius: 20,
                 backgroundColor: Colors.white,
-                child: Icon(Icons.mic, color: Color(0xFF3F7CF4)),
+                child: Icon(Icons.play_arrow, color: Color(0xFF3F7CF4)),
               ),
               const SizedBox(width: 12),
               Column(
