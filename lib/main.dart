@@ -3,6 +3,7 @@ import 'dashboard_page.dart';
 import 'progress_page.dart';
 import 'result_page.dart';
 import 'practice_page.dart';
+import 'package:ispeak/learning_resources_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -30,27 +31,40 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   int _currentIndex = 0;
 
-  late final List<Widget> _pages;
-
-  @override
-  void initState() {
-    super.initState();
-    _pages = [
-      DashBoardPage(onStartPractice: () => setState(() => _currentIndex = 1)),
-      PracticePage(onFinish: () => setState(() => _currentIndex = 3)),
-      const ProgressPage(),
-      ResultPage(onBackToHome: () => setState(() => _currentIndex = 0)),
-    ];
+  Widget _buildPage() {
+    switch (_currentIndex) {
+      case 0:
+        return DashBoardPage(
+          onStartPractice: () => setState(() => _currentIndex = 1),
+          onLearningResources: () => setState(() => _currentIndex = 4),
+        );
+      case 1:
+        return PracticePage(
+          onFinish: () => setState(() => _currentIndex = 3),
+        );
+      case 2:
+        return const ProgressPage();
+      case 3:
+        return ResultPage(
+          onBackToHome: () => setState(() => _currentIndex = 0),
+        );
+      case 4:
+        return LearningResourcesScreen(
+          onBack: () => setState(() => _currentIndex = 0),
+        );
+      default:
+        return DashBoardPage(
+          onStartPractice: () => setState(() => _currentIndex = 1),
+          onLearningResources: () => setState(() => _currentIndex = 4),
+        );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5),
-      body: IndexedStack(
-        index: _currentIndex,
-        children: _pages,
-      ),
+      body: _buildPage(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: _currentIndex == 3
           ? null
@@ -105,7 +119,7 @@ class _MainPageState extends State<MainPage> {
                         ],
                       ),
                     ),
-                    const SizedBox(width: 80), 
+                    const SizedBox(width: 80),
                     // Progress
                     InkWell(
                       onTap: () => setState(() => _currentIndex = 2),

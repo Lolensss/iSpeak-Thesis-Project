@@ -1,10 +1,21 @@
 import 'package:flutter/material.dart';
+import 'learning_resources_page.dart';
+ 
+class DashBoardPage extends StatefulWidget {
+  final VoidCallback onStartPractice;
+  final VoidCallback onLearningResources;
 
-class DashBoardPage extends StatelessWidget {
-  final VoidCallback? onStartPractice;
+  const DashBoardPage({
+    super.key,
+    required this.onStartPractice,
+    required this.onLearningResources,
+  });
 
-  const DashBoardPage({super.key, this.onStartPractice});
+  @override
+  State<DashBoardPage> createState() => _DashBoardPageState();
+}
 
+class _DashBoardPageState extends State<DashBoardPage> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -12,34 +23,35 @@ class DashBoardPage extends StatelessWidget {
         child: Column(
           children: [
             _header(),
+            const SizedBox(height: 16),
             _statsCard(),
             const SizedBox(height: 16),
-            _startPracticeButton(context),
+            _startPracticeButton(),
+            const SizedBox(height: 12),
+            _learningResourcesButton(context),
             const SizedBox(height: 20),
             _recentSessions(),
-            const SizedBox(height: 88), 
+            const SizedBox(height: 88),
           ],
         ),
       ),
     );
   }
 
- 
   Widget _header() {
     return Container(
-      height: 160,
       width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(20, 28, 20, 20),
+      padding: const EdgeInsets.fromLTRB(20, 28, 20, 28),
+      constraints: const BoxConstraints(minHeight: 120),
       decoration: const BoxDecoration(
         color: Color(0xFF3F7CF4),
-        borderRadius: BorderRadius.zero,
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          const Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: const [
+          Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
                 'iSpeak',
@@ -49,7 +61,7 @@ class DashBoardPage extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(height: 6),
+              SizedBox(height: 8),
               Text(
                 'Improve your public speaking',
                 style: TextStyle(
@@ -59,7 +71,7 @@ class DashBoardPage extends StatelessWidget {
               ),
             ],
           ),
-          const CircleAvatar(
+          CircleAvatar(
             radius: 20,
             backgroundColor: Colors.white,
             child: Icon(Icons.person, color: Color(0xFF3F7CF4)),
@@ -70,63 +82,70 @@ class DashBoardPage extends StatelessWidget {
   }
 
   Widget _statsCard() {
-    return Transform.translate(
-      offset: const Offset(0, -28),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 20),
-        padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 12),
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
           boxShadow: const [
-            BoxShadow(
-              color: Colors.black12,
-              blurRadius: 10,
-            ),
+            BoxShadow(color: Colors.black12, blurRadius: 10),
           ],
         ),
         child: const Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            _StatItem(value: '3', label: 'Sessions'),
+            _StatItem(
+              value: '5',
+              label: 'Sessions',
+              valueColor: Color(0xFF3F7CF4),
+            ),
             _VerticalDivider(),
-            _StatItem(value: '82', label: 'Avg Score'),
+            _StatItem(
+              value: '71',
+              label: 'Avg Score',
+              valueColor: Color(0xFFF5A623),
+            ),
             _VerticalDivider(),
-            _StatItem(value: '3', label: 'Days Active'),
+            _StatItem(
+              value: '5',
+              label: 'Days Active',
+              valueColor: Color(0xFF3F7CF4),
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget _startPracticeButton(BuildContext context) {
+  Widget _startPracticeButton() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: InkWell(
-        onTap: onStartPractice,
-        borderRadius: BorderRadius.circular(16),
+      child: GestureDetector(
+        onTap: () => widget.onStartPractice(),
         child: Container(
           width: double.infinity,
-          padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
+          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
           decoration: BoxDecoration(
             color: const Color(0xFF3F7CF4),
             borderRadius: BorderRadius.circular(16),
             boxShadow: const [
-              BoxShadow(color: Colors.black12, blurRadius: 8, offset: Offset(0, 4)),
+              BoxShadow(
+                color: Colors.black12,
+                blurRadius: 8,
+                offset: Offset(0, 4),
+              ),
             ],
           ),
-          child: Row(
+          child: const Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const CircleAvatar(
-                radius: 20,
-                backgroundColor: Colors.white,
-                child: Icon(Icons.play_arrow, color: Color(0xFF3F7CF4)),
-              ),
-              const SizedBox(width: 12),
+              Icon(Icons.mic, color: Colors.white, size: 26),
+              SizedBox(width: 10),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
+                children: [
                   Text(
                     'Start Practice',
                     style: TextStyle(
@@ -152,40 +171,87 @@ class DashBoardPage extends StatelessWidget {
     );
   }
 
-  Widget _recentSessions() {
+  // NOW TAKES context AND NAVIGATES DIRECTLY — no callback needed
+  Widget _learningResourcesButton(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: GestureDetector(
+        onTap: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_) => LearningResourcesScreen(
+                onBack: () => Navigator.of(context).pop(),
+              ),
+            ),
+          );
+        },
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: const Color(0xFF3F7CF4), width: 1.5),
+            boxShadow: const [
+              BoxShadow(
+                color: Colors.black12,
+                blurRadius: 8,
+                offset: Offset(0, 4),
+              ),
+            ],
+          ),
+          child: const Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.menu_book_outlined,
+                  color: Color(0xFF3F7CF4), size: 20),
+              SizedBox(width: 8),
+              Text(
+                'Learning Resources',
+                style: TextStyle(
+                  color: Color(0xFF3F7CF4),
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _recentSessions() {
+    return const Padding(
+      padding: EdgeInsets.symmetric(horizontal: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
+        children: [
           Text(
             'Recent Sessions',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           SizedBox(height: 12),
           _SessionCard(
             date: 'Jan 28, 2026',
-            score: '85',
-            pace: '125 WPM',
-            clarity: '92%',
-            energy: '78%',
+            score: '92',
+            pace: '135 WPM',
+            clarity: '95%',
+            energy: '88%',
           ),
           _SessionCard(
             date: 'Jan 27, 2026',
-            score: '78',
-            pace: '110 WPM',
-            clarity: '85%',
+            score: '76',
+            pace: '125 WPM',
+            clarity: '82%',
             energy: '72%',
           ),
           _SessionCard(
-            date: 'Jan 25, 2026',
-            score: '82',
-            pace: '118 WPM',
-            clarity: '88%',
-            energy: '75%',
+            date: 'Jan 26, 2026',
+            score: '58',
+            pace: '110 WPM',
+            clarity: '65%',
+            energy: '55%',
           ),
         ],
       ),
@@ -193,14 +259,15 @@ class DashBoardPage extends StatelessWidget {
   }
 }
 
-
 class _StatItem extends StatelessWidget {
   final String value;
   final String label;
+  final Color valueColor;
 
   const _StatItem({
     required this.value,
     required this.label,
+    required this.valueColor,
   });
 
   @override
@@ -209,19 +276,16 @@ class _StatItem extends StatelessWidget {
       children: [
         Text(
           value,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 22,
             fontWeight: FontWeight.bold,
-            color: Color(0xFF3F7CF4),
+            color: valueColor,
           ),
         ),
         const SizedBox(height: 4),
         Text(
           label,
-          style: const TextStyle(
-            color: Colors.grey,
-            fontSize: 13,
-          ),
+          style: const TextStyle(color: Colors.grey, fontSize: 13),
         ),
       ],
     );
@@ -236,7 +300,7 @@ class _VerticalDivider extends StatelessWidget {
     return Container(
       height: 40,
       width: 1,
-      color: Colors.grey.shade300,
+      color: Colors.grey[300],
     );
   }
 }
@@ -256,6 +320,13 @@ class _SessionCard extends StatelessWidget {
     required this.energy,
   });
 
+  Color get _scoreColor {
+    final s = int.tryParse(score) ?? 0;
+    if (s >= 90) return const Color(0xFF3FBD7A);
+    if (s >= 70) return const Color(0xFF3F7CF4);
+    return const Color(0xFFF5A623);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -265,10 +336,7 @@ class _SessionCard extends StatelessWidget {
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
         boxShadow: const [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 8,
-          ),
+          BoxShadow(color: Colors.black12, blurRadius: 8)
         ],
       ),
       child: Column(
@@ -280,14 +348,15 @@ class _SessionCard extends StatelessWidget {
                 date,
                 style: const TextStyle(
                   fontWeight: FontWeight.w600,
+                  fontSize: 14,
                 ),
               ),
               Text(
                 score,
-                style: const TextStyle(
-                  fontSize: 22,
+                style: TextStyle(
+                  fontSize: 26,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF3F7CF4),
+                  color: _scoreColor,
                 ),
               ),
             ],
@@ -311,24 +380,29 @@ class _Metric extends StatelessWidget {
   final String label;
   final String value;
 
-  const _Metric({required this.label, required this.value});
+  const _Metric({
+    required this.label,
+    required this.value,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          value,
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const SizedBox(height: 2),
         Text(
           label,
           style: const TextStyle(
             fontSize: 12,
             color: Colors.grey,
+          ),
+        ),
+        const SizedBox(height: 2),
+        Text(
+          value,
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 13,
           ),
         ),
       ],
