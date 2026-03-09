@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
-import 'dashboard_page.dart';
-import 'progress_page.dart';
-import 'result_page.dart';
-import 'practice_page.dart';
-import 'package:ispeak/learning_resources_page.dart'; 
+import 'pages/dashboard_page.dart';
+import 'pages/progress_page.dart';
+import 'pages/result_page.dart';
+import 'pages/practice_page.dart';
+import 'pages/learning_resources_page.dart';
+import 'pages/splash_screen.dart';
+import 'theme/app_theme.dart';
+import 'transitions/page_transitions.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 
@@ -17,8 +21,23 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'iSpeak',
-      theme: ThemeData(primarySwatch: Colors.blue),
-      home: const MainPage(),
+      theme: ThemeData(
+        useMaterial3: true,
+        primaryColor: AppTheme.primaryColor,
+        scaffoldBackgroundColor: AppTheme.backgroundColor,
+        fontFamily: AppTheme.fontFamily,
+        textTheme: AppTheme.textTheme,  
+        pageTransitionsTheme: const PageTransitionsTheme(
+          builders: <TargetPlatform, PageTransitionsBuilder>{
+            TargetPlatform.android: ModernPageTransitionsBuilder(),
+            TargetPlatform.iOS: ModernPageTransitionsBuilder(),
+          },
+        ),
+      ),
+      home: const SplashScreen(),
+      routes: {
+        '/main': (context) => const MainPage(),
+      },
     );
   }
 }
@@ -63,13 +82,10 @@ class _MainPageState extends State<MainPage> {
 
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5),
-
-      // 🔥 THIS IS THE IMPORTANT CHANGE
       body: IndexedStack(
         index: _currentIndex,
         children: _pages,
       ),
-
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: hideBars
           ? null
@@ -85,7 +101,6 @@ class _MainPageState extends State<MainPage> {
                 ),
               ),
             ),
-
       bottomNavigationBar: hideBars
           ? null
           : BottomAppBar(
@@ -129,8 +144,7 @@ class _MainPageState extends State<MainPage> {
             style: TextStyle(
               fontSize: 11,
               color: isSelected ? const Color(0xFF3F7CF4) : Colors.grey,
-              fontWeight:
-                  isSelected ? FontWeight.w600 : FontWeight.normal,
+              fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
             ),
           ),
         ],

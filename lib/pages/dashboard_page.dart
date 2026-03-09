@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'learning_resources_page.dart';
- 
+import 'profile_screen.dart';
+
 class DashBoardPage extends StatefulWidget {
   final VoidCallback onStartPractice;
   final VoidCallback onLearningResources;
@@ -10,7 +11,7 @@ class DashBoardPage extends StatefulWidget {
     required this.onStartPractice,
     required this.onLearningResources,
   });
-
+  
   @override
   State<DashBoardPage> createState() => _DashBoardPageState();
 }
@@ -22,7 +23,7 @@ class _DashBoardPageState extends State<DashBoardPage> {
       child: SingleChildScrollView(
         child: Column(
           children: [
-            _header(),
+            _header(context),
             const SizedBox(height: 16),
             _statsCard(),
             const SizedBox(height: 16),
@@ -38,7 +39,7 @@ class _DashBoardPageState extends State<DashBoardPage> {
     );
   }
 
-  Widget _header() {
+  Widget _header(BuildContext context) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(20, 28, 20, 28),
@@ -49,8 +50,8 @@ class _DashBoardPageState extends State<DashBoardPage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
-          Column(
+        children: [
+          const Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
@@ -71,10 +72,19 @@ class _DashBoardPageState extends State<DashBoardPage> {
               ),
             ],
           ),
-          CircleAvatar(
-            radius: 20,
-            backgroundColor: Colors.white,
-            child: Icon(Icons.person, color: Color(0xFF3F7CF4)),
+          // ✅ Tappable profile icon
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const ProfileScreen()),
+              );
+            },
+            child: const CircleAvatar(
+              radius: 20,
+              backgroundColor: Colors.white,
+              child: Icon(Icons.person, color: Color(0xFF3F7CF4)),
+            ),
           ),
         ],
       ),
@@ -171,7 +181,6 @@ class _DashBoardPageState extends State<DashBoardPage> {
     );
   }
 
-  
   Widget _learningResourcesButton(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -203,8 +212,7 @@ class _DashBoardPageState extends State<DashBoardPage> {
           child: const Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.menu_book_outlined,
-                  color: Color(0xFF3F7CF4), size: 20),
+              Icon(Icons.menu_book_outlined, color: Color(0xFF3F7CF4), size: 20),
               SizedBox(width: 8),
               Text(
                 'Learning Resources',
