@@ -19,10 +19,10 @@ class _PracticePageState extends State<PracticePage> {
 
   /// START RECORDING
   void _start() {
-    _timer?.cancel(); // 🔥 Prevent multiple timers
+    _timer?.cancel(); 
 
     if (_state == PracticeState.ready) {
-      _seconds = 0; // 🔥 Reset timer when starting fresh
+      _seconds = 0; 
     }
 
     setState(() {
