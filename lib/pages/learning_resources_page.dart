@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ispeak/pages/time_challenge_page.dart';
+import 'package:ispeak/pages/script_practice_page.dart';
 
 enum _Tab { scripts, challenges, guidedTasks }
 
@@ -9,7 +10,8 @@ class LearningResourcesScreen extends StatefulWidget {
   const LearningResourcesScreen({super.key, this.onBack});
 
   @override
-  State<LearningResourcesScreen> createState() => _LearningResourcesScreenState();
+  State<LearningResourcesScreen> createState() =>
+      _LearningResourcesScreenState();
 }
 
 class _LearningResourcesScreenState extends State<LearningResourcesScreen> {
@@ -38,8 +40,10 @@ class _LearningResourcesScreenState extends State<LearningResourcesScreen> {
                         _subTitle(),
                         const SizedBox(height: 14),
                         if (_activeTab == _Tab.scripts) ..._scriptCards(),
-                        if (_activeTab == _Tab.challenges) ..._challengeCards(),
-                        if (_activeTab == _Tab.guidedTasks) ..._guidedTaskCards(),
+                        if (_activeTab == _Tab.challenges)
+                          ..._challengeCards(),
+                        if (_activeTab == _Tab.guidedTasks)
+                          ..._guidedTaskCards(),
                       ],
                     ),
                   ),
@@ -134,7 +138,8 @@ class _LearningResourcesScreenState extends State<LearningResourcesScreen> {
             label,
             style: TextStyle(
               fontSize: 13,
-              fontWeight: isActive ? FontWeight.bold : FontWeight.w500,
+              fontWeight:
+                  isActive ? FontWeight.bold : FontWeight.w500,
               color: isActive ? Colors.white : Colors.grey,
             ),
           ),
@@ -163,7 +168,18 @@ class _LearningResourcesScreenState extends State<LearningResourcesScreen> {
     }
   }
 
-  // ── Scripts 
+  // ── Scripts ──────────────────────────────────────────────────────────────
+
+  /// Helper: navigate to ScriptDetailPage for a given script title
+  void _openScript(String title) {
+    final script = scriptLibrary.firstWhere((s) => s.title == title);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => ScriptDetailPage(script: script),
+      ),
+    );
+  }
 
   List<Widget> _scriptCards() {
     return [
@@ -173,7 +189,7 @@ class _LearningResourcesScreenState extends State<LearningResourcesScreen> {
         duration: '2 min',
         difficulty: ChallengeDifficulty.beginner,
         language: 'English',
-        onTap: () {},
+        onTap: () => _openScript('Self Introduction'),
       ),
       const SizedBox(height: 12),
       _ScriptCard(
@@ -182,7 +198,7 @@ class _LearningResourcesScreenState extends State<LearningResourcesScreen> {
         duration: '2 min',
         difficulty: ChallengeDifficulty.beginner,
         language: 'Filipino',
-        onTap: () {},
+        onTap: () => _openScript('Pagpapakilala (Filipino)'),
       ),
       const SizedBox(height: 12),
       _ScriptCard(
@@ -191,7 +207,7 @@ class _LearningResourcesScreenState extends State<LearningResourcesScreen> {
         duration: '5 min',
         difficulty: ChallengeDifficulty.intermediate,
         language: 'English',
-        onTap: () {},
+        onTap: () => _openScript('Product Presentation'),
       ),
       const SizedBox(height: 12),
       _ScriptCard(
@@ -200,7 +216,7 @@ class _LearningResourcesScreenState extends State<LearningResourcesScreen> {
         duration: '5 min',
         difficulty: ChallengeDifficulty.intermediate,
         language: 'English',
-        onTap: () {},
+        onTap: () => _openScript('Motivational Speech'),
       ),
       const SizedBox(height: 12),
       _ScriptCard(
@@ -209,12 +225,12 @@ class _LearningResourcesScreenState extends State<LearningResourcesScreen> {
         duration: '10 min',
         difficulty: ChallengeDifficulty.advanced,
         language: 'English',
-        onTap: () {},
+        onTap: () => _openScript('Keynote Address'),
       ),
     ];
   }
 
-  // ── Challenges 
+  // ── Challenges ────────────────────────────────────────────────────────────
 
   List<Widget> _challengeCards() {
     return [
@@ -315,7 +331,7 @@ class _LearningResourcesScreenState extends State<LearningResourcesScreen> {
     ];
   }
 
-  // ── Guided Tasks 
+  // ── Guided Tasks ──────────────────────────────────────────────────────────
 
   List<Widget> _guidedTaskCards() {
     return [
@@ -375,6 +391,8 @@ class _LearningResourcesScreenState extends State<LearningResourcesScreen> {
     ];
   }
 }
+
+// ─── Script Card ──────────────────────────────────────────────────────────────
 
 class _ScriptCard extends StatelessWidget {
   final String title;
@@ -474,7 +492,8 @@ class _ScriptCard extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Icon(Icons.access_time,
-                              size: 13, color: Colors.grey.shade500),
+                              size: 13,
+                              color: Colors.grey.shade500),
                           const SizedBox(width: 4),
                           Text(
                             duration,
@@ -538,7 +557,7 @@ class _ScriptCard extends StatelessWidget {
   }
 }
 
-// ── Guided Task Card 
+// ─── Guided Task Card ─────────────────────────────────────────────────────────
 
 class _GuidedTaskCard extends StatelessWidget {
   final String title;
@@ -574,7 +593,6 @@ class _GuidedTaskCard extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // ── Left: icon box ──
             Container(
               width: 44,
               height: 44,
@@ -589,7 +607,6 @@ class _GuidedTaskCard extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 14),
-            // ── Middle: content ──
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -630,7 +647,6 @@ class _GuidedTaskCard extends StatelessWidget {
                 ],
               ),
             ),
-            // ── Right: chevron ──
             const Icon(
               Icons.chevron_right,
               color: Colors.grey,
@@ -643,6 +659,7 @@ class _GuidedTaskCard extends StatelessWidget {
   }
 }
 
+// ─── Challenge Card ───────────────────────────────────────────────────────────
 
 class _ChallengeCard extends StatelessWidget {
   final String title;
@@ -713,7 +730,6 @@ class _ChallengeCard extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // ── Left: content ──
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -741,12 +757,12 @@ class _ChallengeCard extends StatelessWidget {
                     runSpacing: 6,
                     crossAxisAlignment: WrapCrossAlignment.center,
                     children: [
-                      // Duration
                       Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Icon(Icons.access_time,
-                              size: 13, color: Colors.grey.shade500),
+                              size: 13,
+                              color: Colors.grey.shade500),
                           const SizedBox(width: 4),
                           Text(
                             _formattedDuration,
@@ -757,7 +773,6 @@ class _ChallengeCard extends StatelessWidget {
                           ),
                         ],
                       ),
-                      // Difficulty badge
                       Container(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 10, vertical: 3),
@@ -774,12 +789,12 @@ class _ChallengeCard extends StatelessWidget {
                           ),
                         ),
                       ),
-                      // Target WPM
                       Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Icon(Icons.speed,
-                              size: 13, color: Colors.grey.shade500),
+                              size: 13,
+                              color: Colors.grey.shade500),
                           const SizedBox(width: 4),
                           Text(
                             'Target: $targetWpm',
@@ -796,7 +811,6 @@ class _ChallengeCard extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 12),
-            // ── Right: bullseye icon ──
             Container(
               width: 40,
               height: 40,
@@ -816,4 +830,3 @@ class _ChallengeCard extends StatelessWidget {
     );
   }
 }
-
