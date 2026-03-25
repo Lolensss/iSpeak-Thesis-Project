@@ -82,7 +82,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 const SizedBox(height: 5),
 
-                Hero(
+                const Hero(
                   tag: 'brand_text',
                   child: Material(
                     type: MaterialType.transparency,
@@ -201,7 +201,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
                               );
                             },
-                            child: Text(
+                            child: const Text(
                               'Forgot Password?',
                               style: TextStyle(
                                 fontSize: 13,
@@ -215,7 +215,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         const SizedBox(height: 28),
 
                         _isLoading
-                            ? SizedBox(
+                            ? const SizedBox(
                                 height: 54,
                                 child: Center(
                                   child: CircularProgressIndicator(
@@ -244,7 +244,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             const SizedBox(width: 4),
                             GestureDetector(
                               onTap: _goToSignUp,
-                              child: Text(
+                              child: const Text(
                                 'Sign Up',
                                 style: TextStyle(
                                   fontSize: 13,

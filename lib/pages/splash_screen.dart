@@ -37,7 +37,7 @@ class SplashScreen extends StatelessWidget {
 
               const SizedBox(height: 20),
 
-              Hero(tag: 'brand_text', child: Material(
+              const Hero(tag: 'brand_text', child: Material(
                 type: MaterialType.transparency,
                 child: Text(
                   "iSpeak", 

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../theme/app_theme.dart';
 
 class LanguageScreen extends StatefulWidget {
   const LanguageScreen({super.key});
@@ -19,7 +18,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
         children: [
           Container(
             width: double.infinity,
-            color: AppTheme.accentColor,
+            color: const Color(0xFF3F7CF4),
             padding: EdgeInsets.only(
               top: MediaQuery.of(context).padding.top + 20,
               left: 24,
@@ -31,9 +30,9 @@ class _LanguageScreenState extends State<LanguageScreen> {
               children: [
                 GestureDetector(
                   onTap: () => Navigator.pop(context, selectedLanguage),
-                  child: Row(
+                  child: const Row(
                     mainAxisSize: MainAxisSize.min,
-                    children: const [
+                    children: [
                       Icon(Icons.chevron_left, color: Colors.white, size: 26),
                       SizedBox(width: 4),
                       Text('Back', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500)),
@@ -80,9 +79,9 @@ class _LanguageScreenState extends State<LanguageScreen> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
         decoration: BoxDecoration(
-          color: selected ? AppTheme.primaryColor.withAlpha((0.08 * 255).round()) : Colors.white,
+          color: selected ? const Color(0xFF3F7CF4).withAlpha((0.08 * 255).round()) : Colors.white,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: selected ? AppTheme.primaryColor : Colors.grey.shade300, width: 1.5),
+          border: Border.all(color: selected ? const Color(0xFF3F7CF4) : Colors.grey.shade300, width: 1.5),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -92,7 +91,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
               Container(
                 width: 24,
                 height: 24,
-                decoration: const BoxDecoration(color: AppTheme.primaryColor, shape: BoxShape.circle),
+                decoration: const BoxDecoration(color: Color(0xFF3F7CF4), shape: BoxShape.circle),
                 child: const Icon(Icons.check, color: Colors.white, size: 16),
               ),
           ],

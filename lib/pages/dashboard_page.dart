@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'learning_resources_page.dart';
-import 'profile_screen.dart';
+import 'package:ispeak/pages/learning_resources_page.dart';
+import 'package:ispeak/pages/profile_screen.dart';
 
 class DashBoardPage extends StatefulWidget {
   final VoidCallback onStartPractice;
@@ -11,7 +11,7 @@ class DashBoardPage extends StatefulWidget {
     required this.onStartPractice,
     required this.onLearningResources,
   });
-  
+
   @override
   State<DashBoardPage> createState() => _DashBoardPageState();
 }
@@ -22,7 +22,7 @@ class _DashBoardPageState extends State<DashBoardPage> {
     return SafeArea(
       child: SingleChildScrollView(
         child: Column(
-          children: [
+          children: <Widget>[
             _header(context),
             const SizedBox(height: 16),
             _statsCard(),
@@ -50,10 +50,10 @@ class _DashBoardPageState extends State<DashBoardPage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+        children: <Widget>[
           const Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+            children: <Widget>[
               Text(
                 'iSpeak',
                 style: TextStyle(
@@ -77,7 +77,8 @@ class _DashBoardPageState extends State<DashBoardPage> {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (_) => const ProfileScreen()),
+                MaterialPageRoute<dynamic>(
+                    builder: (BuildContext context) => const ProfileScreen()),
               );
             },
             child: const CircleAvatar(
@@ -99,13 +100,13 @@ class _DashBoardPageState extends State<DashBoardPage> {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
-          boxShadow: const [
+          boxShadow: const <BoxShadow>[
             BoxShadow(color: Colors.black12, blurRadius: 10),
           ],
         ),
         child: const Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
+          children: <Widget>[
             _StatItem(
               value: '5',
               label: 'Sessions',
@@ -133,14 +134,14 @@ class _DashBoardPageState extends State<DashBoardPage> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: GestureDetector(
-        onTap: () => widget.onStartPractice(),
+        onTap: widget.onStartPractice,
         child: Container(
           width: double.infinity,
           padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
           decoration: BoxDecoration(
             color: const Color(0xFF3F7CF4),
             borderRadius: BorderRadius.circular(16),
-            boxShadow: const [
+            boxShadow: const <BoxShadow>[
               BoxShadow(
                 color: Colors.black12,
                 blurRadius: 8,
@@ -150,12 +151,12 @@ class _DashBoardPageState extends State<DashBoardPage> {
           ),
           child: const Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [
+            children: <Widget>[
               Icon(Icons.mic, color: Colors.white, size: 26),
               SizedBox(width: 10),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+                children: <Widget>[
                   Text(
                     'Start Practice',
                     style: TextStyle(
@@ -187,8 +188,8 @@ class _DashBoardPageState extends State<DashBoardPage> {
       child: GestureDetector(
         onTap: () {
           Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (_) => LearningResourcesScreen(
+            MaterialPageRoute<dynamic>(
+              builder: (BuildContext context) => LearningResourcesScreen(
                 onBack: () => Navigator.of(context).pop(),
               ),
             ),
@@ -201,7 +202,7 @@ class _DashBoardPageState extends State<DashBoardPage> {
             color: Colors.white,
             borderRadius: BorderRadius.circular(16),
             border: Border.all(color: const Color(0xFF3F7CF4), width: 1.5),
-            boxShadow: const [
+            boxShadow: const <BoxShadow>[
               BoxShadow(
                 color: Colors.black12,
                 blurRadius: 8,
@@ -211,8 +212,9 @@ class _DashBoardPageState extends State<DashBoardPage> {
           ),
           child: const Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.menu_book_outlined, color: Color(0xFF3F7CF4), size: 20),
+            children: <Widget>[
+              Icon(Icons.menu_book_outlined,
+                  color: Color(0xFF3F7CF4), size: 20),
               SizedBox(width: 8),
               Text(
                 'Learning Resources',
@@ -234,7 +236,7 @@ class _DashBoardPageState extends State<DashBoardPage> {
       padding: EdgeInsets.symmetric(horizontal: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+        children: <Widget>[
           Text(
             'Recent Sessions',
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -281,7 +283,7 @@ class _StatItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: [
+      children: <Widget>[
         Text(
           value,
           style: TextStyle(
@@ -329,9 +331,13 @@ class _SessionCard extends StatelessWidget {
   });
 
   Color get _scoreColor {
-    final s = int.tryParse(score) ?? 0;
-    if (s >= 90) return const Color(0xFF3FBD7A);
-    if (s >= 70) return const Color(0xFF3F7CF4);
+    final int s = int.tryParse(score) ?? 0;
+    if (s >= 90) {
+      return const Color(0xFF3FBD7A);
+    }
+    if (s >= 70) {
+      return const Color(0xFF3F7CF4);
+    }
     return const Color(0xFFF5A623);
   }
 
@@ -343,15 +349,15 @@ class _SessionCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
-        boxShadow: const [
+        boxShadow: const <BoxShadow>[
           BoxShadow(color: Colors.black12, blurRadius: 8)
         ],
       ),
       child: Column(
-        children: [
+        children: <Widget>[
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
+            children: <Widget>[
               Text(
                 date,
                 style: const TextStyle(
@@ -370,12 +376,12 @@ class _SessionCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 12),
-          Row(
+          const Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              _Metric(label: 'Pace', value: pace),
-              _Metric(label: 'Clarity', value: clarity),
-              _Metric(label: 'Energy', value: energy),
+            children: <Widget>[
+              _Metric(label: 'Pace', value: 'pace'),
+              _Metric(label: 'Clarity', value: 'clarity'),
+              _Metric(label: 'Energy', value: 'energy'),
             ],
           ),
         ],
@@ -397,7 +403,7 @@ class _Metric extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
+      children: <Widget>[
         Text(
           label,
           style: const TextStyle(

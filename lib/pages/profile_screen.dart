@@ -303,11 +303,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           // Score Guide Title with Icon
-                          Row(
+                          const Row(
                             children: [
                               Icon(Icons.info_outline, color: AppTheme.accentColor, size: 20),
-                              const SizedBox(width: 8),
-                              const Text(
+                              SizedBox(width: 8),
+                              Text(
                                 'Score Guide',
                                 style: TextStyle(
                                   fontSize: 18,

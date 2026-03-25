@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:ispeak/pages/time_challenge_page.dart';
 
 enum _Tab { scripts, challenges, guidedTasks }
-
-enum _Difficulty { beginner, intermediate, advanced }
 
 class LearningResourcesScreen extends StatefulWidget {
   final VoidCallback? onBack;
@@ -10,11 +9,10 @@ class LearningResourcesScreen extends StatefulWidget {
   const LearningResourcesScreen({super.key, this.onBack});
 
   @override
-  State<LearningResourcesScreen> createState() =>
-      _LearningResourcesPageState();
+  State<LearningResourcesScreen> createState() => _LearningResourcesScreenState();
 }
 
-class _LearningResourcesPageState extends State<LearningResourcesScreen> {
+class _LearningResourcesScreenState extends State<LearningResourcesScreen> {
   _Tab _activeTab = _Tab.scripts;
 
   @override
@@ -173,7 +171,7 @@ class _LearningResourcesPageState extends State<LearningResourcesScreen> {
         title: 'Self Introduction',
         description: 'A simple introduction speech to help you get started',
         duration: '2 min',
-        difficulty: _Difficulty.beginner,
+        difficulty: ChallengeDifficulty.beginner,
         language: 'English',
         onTap: () {},
       ),
@@ -182,7 +180,7 @@ class _LearningResourcesPageState extends State<LearningResourcesScreen> {
         title: 'Pagpapakilala (Filipino)',
         description: 'Isang simpleng talumpati para sa pagpapakilala',
         duration: '2 min',
-        difficulty: _Difficulty.beginner,
+        difficulty: ChallengeDifficulty.beginner,
         language: 'Filipino',
         onTap: () {},
       ),
@@ -191,7 +189,7 @@ class _LearningResourcesPageState extends State<LearningResourcesScreen> {
         title: 'Product Presentation',
         description: 'Present a product or service effectively',
         duration: '5 min',
-        difficulty: _Difficulty.intermediate,
+        difficulty: ChallengeDifficulty.intermediate,
         language: 'English',
         onTap: () {},
       ),
@@ -200,7 +198,7 @@ class _LearningResourcesPageState extends State<LearningResourcesScreen> {
         title: 'Motivational Speech',
         description: 'Inspire and motivate your audience',
         duration: '5 min',
-        difficulty: _Difficulty.intermediate,
+        difficulty: ChallengeDifficulty.intermediate,
         language: 'English',
         onTap: () {},
       ),
@@ -209,7 +207,7 @@ class _LearningResourcesPageState extends State<LearningResourcesScreen> {
         title: 'Keynote Address',
         description: 'Deliver a compelling keynote presentation',
         duration: '10 min',
-        difficulty: _Difficulty.advanced,
+        difficulty: ChallengeDifficulty.advanced,
         language: 'English',
         onTap: () {},
       ),
@@ -224,45 +222,95 @@ class _LearningResourcesPageState extends State<LearningResourcesScreen> {
         title: 'Quick Pitch',
         description: 'Deliver a 60-second elevator pitch about yourself',
         durationSeconds: 60,
-        difficulty: _Difficulty.beginner,
+        difficulty: ChallengeDifficulty.beginner,
         targetWpm: '120-140 WPM',
-        onTap: () {},
+        onTap: () => Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => TimedChallengePage(
+              challenge: quickPitchChallenge,
+              onBack: () => Navigator.pop(context),
+              onBackToHome: () =>
+                  Navigator.popUntil(context, (r) => r.isFirst),
+            ),
+          ),
+        ),
       ),
       const SizedBox(height: 12),
       _ChallengeCard(
         title: 'Impromptu Topic',
         description: 'Speak for 2 minutes on a random topic',
         durationSeconds: 120,
-        difficulty: _Difficulty.intermediate,
+        difficulty: ChallengeDifficulty.intermediate,
         targetWpm: '130-150 WPM',
-        onTap: () {},
+        onTap: () => Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => TimedChallengePage(
+              challenge: impromptuTopicChallenge,
+              onBack: () => Navigator.pop(context),
+              onBackToHome: () =>
+                  Navigator.popUntil(context, (r) => r.isFirst),
+            ),
+          ),
+        ),
       ),
       const SizedBox(height: 12),
       _ChallengeCard(
         title: 'Clarity Challenge',
         description: 'Speak for 90 seconds without filler words',
         durationSeconds: 90,
-        difficulty: _Difficulty.intermediate,
+        difficulty: ChallengeDifficulty.intermediate,
         targetWpm: '120-150 WPM',
-        onTap: () {},
+        onTap: () => Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => TimedChallengePage(
+              challenge: clarityChallengeData,
+              onBack: () => Navigator.pop(context),
+              onBackToHome: () =>
+                  Navigator.popUntil(context, (r) => r.isFirst),
+            ),
+          ),
+        ),
       ),
       const SizedBox(height: 12),
       _ChallengeCard(
         title: 'Speed Round',
         description: 'Deliver a 3-minute presentation at optimal pace',
         durationSeconds: 180,
-        difficulty: _Difficulty.advanced,
+        difficulty: ChallengeDifficulty.advanced,
         targetWpm: '140+ WPM',
-        onTap: () {},
+        onTap: () => Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => TimedChallengePage(
+              challenge: speedRoundChallenge,
+              onBack: () => Navigator.pop(context),
+              onBackToHome: () =>
+                  Navigator.popUntil(context, (r) => r.isFirst),
+            ),
+          ),
+        ),
       ),
       const SizedBox(height: 12),
       _ChallengeCard(
         title: 'Bilingual Switch',
         description: 'Present in English and Filipino',
         durationSeconds: 120,
-        difficulty: _Difficulty.advanced,
+        difficulty: ChallengeDifficulty.advanced,
         targetWpm: '120-150 WPM',
-        onTap: () {},
+        onTap: () => Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => TimedChallengePage(
+              challenge: bilingualSwitchChallenge,
+              onBack: () => Navigator.pop(context),
+              onBackToHome: () =>
+                  Navigator.popUntil(context, (r) => r.isFirst),
+            ),
+          ),
+        ),
       ),
     ];
   }
@@ -326,18 +374,13 @@ class _LearningResourcesPageState extends State<LearningResourcesScreen> {
       ),
     ];
   }
-
-
 }
-
-
-// ── Script Card 
 
 class _ScriptCard extends StatelessWidget {
   final String title;
   final String description;
   final String duration;
-  final _Difficulty difficulty;
+  final ChallengeDifficulty difficulty;
   final String language;
   final VoidCallback? onTap;
 
@@ -352,33 +395,33 @@ class _ScriptCard extends StatelessWidget {
 
   Color get _difficultyColor {
     switch (difficulty) {
-      case _Difficulty.beginner:
+      case ChallengeDifficulty.beginner:
         return const Color(0xFF3FBD7A);
-      case _Difficulty.intermediate:
+      case ChallengeDifficulty.intermediate:
         return const Color(0xFF3F7CF4);
-      case _Difficulty.advanced:
+      case ChallengeDifficulty.advanced:
         return const Color(0xFFB45FD4);
     }
   }
 
   Color get _difficultyBg {
     switch (difficulty) {
-      case _Difficulty.beginner:
+      case ChallengeDifficulty.beginner:
         return const Color(0xFFDFF5E8);
-      case _Difficulty.intermediate:
+      case ChallengeDifficulty.intermediate:
         return const Color(0xFFE6EEFF);
-      case _Difficulty.advanced:
+      case ChallengeDifficulty.advanced:
         return const Color(0xFFF3E6FF);
     }
   }
 
   String get _difficultyLabel {
     switch (difficulty) {
-      case _Difficulty.beginner:
+      case ChallengeDifficulty.beginner:
         return 'Beginner';
-      case _Difficulty.intermediate:
+      case ChallengeDifficulty.intermediate:
         return 'Intermediate';
-      case _Difficulty.advanced:
+      case ChallengeDifficulty.advanced:
         return 'Advanced';
     }
   }
@@ -605,7 +648,7 @@ class _ChallengeCard extends StatelessWidget {
   final String title;
   final String description;
   final int durationSeconds;
-  final _Difficulty difficulty;
+  final ChallengeDifficulty difficulty;
   final String targetWpm;
   final VoidCallback? onTap;
 
@@ -620,33 +663,33 @@ class _ChallengeCard extends StatelessWidget {
 
   Color get _difficultyColor {
     switch (difficulty) {
-      case _Difficulty.beginner:
+      case ChallengeDifficulty.beginner:
         return const Color(0xFF3FBD7A);
-      case _Difficulty.intermediate:
+      case ChallengeDifficulty.intermediate:
         return const Color(0xFF3F7CF4);
-      case _Difficulty.advanced:
+      case ChallengeDifficulty.advanced:
         return const Color(0xFFB45FD4);
     }
   }
 
   Color get _difficultyBg {
     switch (difficulty) {
-      case _Difficulty.beginner:
+      case ChallengeDifficulty.beginner:
         return const Color(0xFFDFF5E8);
-      case _Difficulty.intermediate:
+      case ChallengeDifficulty.intermediate:
         return const Color(0xFFE6EEFF);
-      case _Difficulty.advanced:
+      case ChallengeDifficulty.advanced:
         return const Color(0xFFF3E6FF);
     }
   }
 
   String get _difficultyLabel {
     switch (difficulty) {
-      case _Difficulty.beginner:
+      case ChallengeDifficulty.beginner:
         return 'Beginner';
-      case _Difficulty.intermediate:
+      case ChallengeDifficulty.intermediate:
         return 'Intermediate';
-      case _Difficulty.advanced:
+      case ChallengeDifficulty.advanced:
         return 'Advanced';
     }
   }
@@ -773,3 +816,4 @@ class _ChallengeCard extends StatelessWidget {
     );
   }
 }
+

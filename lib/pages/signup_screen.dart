@@ -106,7 +106,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
                 const SizedBox(height: 5),
 
-                Hero(
+                const Hero(
                   tag: 'brand_text', 
                   child: Material(
                     type: MaterialType.transparency,
@@ -339,7 +339,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                           color: Colors.grey[600],
                                         ),
                                       ),
-                                      TextSpan(
+                                      const TextSpan(
                                         text: 'Terms & Conditions',
                                         style: TextStyle(
                                           fontSize: 12,
@@ -358,7 +358,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         const SizedBox(height: 28),
 
                         _isLoading
-                            ? SizedBox(
+                            ? const SizedBox(
                                 height: 54,
                                 child: Center(
                                   child: CircularProgressIndicator(
@@ -387,7 +387,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             const SizedBox(width: 4),
                             GestureDetector(
                               onTap: _goToLogin,
-                              child: Text(
+                              child: const Text(
                                 'Log In',
                                 style: TextStyle(
                                   fontSize: 13,
