@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ispeak/pages/time_challenge_page.dart';
 import 'package:ispeak/pages/script_practice_page.dart';
+import 'package:ispeak/pages/guided_task.dart';
 
 enum _Tab { scripts, challenges, guidedTasks }
 
@@ -138,8 +139,7 @@ class _LearningResourcesScreenState extends State<LearningResourcesScreen> {
             label,
             style: TextStyle(
               fontSize: 13,
-              fontWeight:
-                  isActive ? FontWeight.bold : FontWeight.w500,
+              fontWeight: isActive ? FontWeight.bold : FontWeight.w500,
               color: isActive ? Colors.white : Colors.grey,
             ),
           ),
@@ -170,13 +170,22 @@ class _LearningResourcesScreenState extends State<LearningResourcesScreen> {
 
   // ── Scripts ──────────────────────────────────────────────────────────────
 
-  /// Helper: navigate to ScriptDetailPage for a given script title
   void _openScript(String title) {
     final script = scriptLibrary.firstWhere((s) => s.title == title);
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (_) => ScriptDetailPage(script: script),
+      ),
+    );
+  }
+
+  void _openGuidedTask(String title) {
+    final task = guidedTaskLibrary.firstWhere((t) => t.title == title);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => GuidedTaskDetailPage(task: task),
       ),
     );
   }
@@ -341,7 +350,7 @@ class _LearningResourcesScreenState extends State<LearningResourcesScreen> {
         durationMin: 5,
         category: 'Foundation',
         icon: Icons.volume_up,
-        onTap: () {},
+        onTap: () => _openGuidedTask('Breathing & Projection'),
       ),
       const SizedBox(height: 12),
       _GuidedTaskCard(
@@ -350,7 +359,7 @@ class _LearningResourcesScreenState extends State<LearningResourcesScreen> {
         durationMin: 5,
         category: 'Clarity',
         icon: Icons.chat_bubble_outline,
-        onTap: () {},
+        onTap: () => _openGuidedTask('Articulation Drills'),
       ),
       const SizedBox(height: 12),
       _GuidedTaskCard(
@@ -359,7 +368,7 @@ class _LearningResourcesScreenState extends State<LearningResourcesScreen> {
         durationMin: 5,
         category: 'Timing',
         icon: Icons.access_time,
-        onTap: () {},
+        onTap: () => _openGuidedTask('Pace Control'),
       ),
       const SizedBox(height: 12),
       _GuidedTaskCard(
@@ -368,7 +377,7 @@ class _LearningResourcesScreenState extends State<LearningResourcesScreen> {
         durationMin: 5,
         category: 'Delivery',
         icon: Icons.bolt,
-        onTap: () {},
+        onTap: () => _openGuidedTask('Energy & Enthusiasm'),
       ),
       const SizedBox(height: 12),
       _GuidedTaskCard(
@@ -377,7 +386,7 @@ class _LearningResourcesScreenState extends State<LearningResourcesScreen> {
         durationMin: 5,
         category: 'Clarity',
         icon: Icons.chat_bubble_outline,
-        onTap: () {},
+        onTap: () => _openGuidedTask('Eliminating Fillers'),
       ),
       const SizedBox(height: 12),
       _GuidedTaskCard(
@@ -386,7 +395,7 @@ class _LearningResourcesScreenState extends State<LearningResourcesScreen> {
         durationMin: 5,
         category: 'Presence',
         icon: Icons.person_outline,
-        onTap: () {},
+        onTap: () => _openGuidedTask('Body Language'),
       ),
     ];
   }
@@ -492,8 +501,7 @@ class _ScriptCard extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Icon(Icons.access_time,
-                              size: 13,
-                              color: Colors.grey.shade500),
+                              size: 13, color: Colors.grey.shade500),
                           const SizedBox(width: 4),
                           Text(
                             duration,
@@ -761,8 +769,7 @@ class _ChallengeCard extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Icon(Icons.access_time,
-                              size: 13,
-                              color: Colors.grey.shade500),
+                              size: 13, color: Colors.grey.shade500),
                           const SizedBox(width: 4),
                           Text(
                             _formattedDuration,
@@ -793,8 +800,7 @@ class _ChallengeCard extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Icon(Icons.speed,
-                              size: 13,
-                              color: Colors.grey.shade500),
+                              size: 13, color: Colors.grey.shade500),
                           const SizedBox(width: 4),
                           Text(
                             'Target: $targetWpm',

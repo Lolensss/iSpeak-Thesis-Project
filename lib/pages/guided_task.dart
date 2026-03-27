@@ -1,0 +1,858 @@
+import 'package:flutter/material.dart';
+import 'package:ispeak/pages/time_challenge_page.dart';
+import 'package:ispeak/pages/script_practice_page.dart';
+
+enum _Tab { scripts, challenges, guidedTasks }
+
+class LearningResourcesScreen extends StatefulWidget {
+  final VoidCallback? onBack;
+
+  const LearningResourcesScreen({super.key, this.onBack});
+
+  @override
+  State<LearningResourcesScreen> createState() =>
+      _LearningResourcesScreenState();
+}
+
+class _LearningResourcesScreenState extends State<LearningResourcesScreen> {
+  _Tab _activeTab = _Tab.scripts;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Material(
+        color: const Color(0xFFF2F4F7),
+        child: SafeArea(
+          bottom: true,
+          child: DefaultTextStyle.merge(
+            style: const TextStyle(decoration: TextDecoration.none),
+            child: Column(
+              children: [
+                _header(),
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.fromLTRB(16, 20, 16, 100),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _tabBar(),
+                        const SizedBox(height: 20),
+                        _subTitle(),
+                        const SizedBox(height: 14),
+                        if (_activeTab == _Tab.scripts) ..._scriptCards(),
+                        if (_activeTab == _Tab.challenges) ..._challengeCards(),
+                        if (_activeTab == _Tab.guidedTasks) ..._guidedTaskCards(),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _header() {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(16, 14, 16, 22),
+      decoration: const BoxDecoration(color: Color(0xFF3F7CF4)),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          GestureDetector(
+            onTap: widget.onBack,
+            child: const Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.chevron_left, color: Colors.white, size: 20),
+                Text('Back', style: TextStyle(color: Colors.white, fontSize: 14)),
+              ],
+            ),
+          ),
+          const SizedBox(height: 10),
+          const Text(
+            'Learning Resources',
+            style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 4),
+          const Text(
+            'Improve your speaking skills',
+            style: TextStyle(color: Colors.white70, fontSize: 13),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _tabBar() {
+    return Container(
+      padding: const EdgeInsets.all(4),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 6)],
+      ),
+      child: Row(
+        children: [
+          _tabItem('Scripts', _Tab.scripts),
+          _tabItem('Challenges', _Tab.challenges),
+          _tabItem('Guided Tasks', _Tab.guidedTasks),
+        ],
+      ),
+    );
+  }
+
+  Widget _tabItem(String label, _Tab tab) {
+    final isActive = _activeTab == tab;
+    return Expanded(
+      child: GestureDetector(
+        onTap: () => setState(() => _activeTab = tab),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          decoration: BoxDecoration(
+            color: isActive ? const Color(0xFF3F7CF4) : Colors.transparent,
+            borderRadius: BorderRadius.circular(9),
+          ),
+          alignment: Alignment.center,
+          child: Text(
+            label,
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: isActive ? FontWeight.bold : FontWeight.w500,
+              color: isActive ? Colors.white : Colors.grey,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _subTitle() {
+    switch (_activeTab) {
+      case _Tab.scripts:
+        return const Text('Choose a script to practice with',
+            style: TextStyle(fontSize: 13, color: Colors.grey));
+      case _Tab.challenges:
+        return const Text('Test your skills with timed challenges',
+            style: TextStyle(fontSize: 13, color: Colors.grey));
+      case _Tab.guidedTasks:
+        return const Text('Step-by-step exercises to improve your skills',
+            style: TextStyle(fontSize: 13, color: Colors.grey));
+    }
+  }
+
+  // ── Open guided task detail ───────────────────────────────────────────────
+
+  void _openGuidedTask(String title) {
+    final task = guidedTaskLibrary.firstWhere((t) => t.title == title);
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => GuidedTaskDetailPage(task: task)),
+    );
+  }
+
+  // ── Scripts ───────────────────────────────────────────────────────────────
+
+  void _openScript(String title) {
+    final script = scriptLibrary.firstWhere((s) => s.title == title);
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => ScriptDetailPage(script: script)),
+    );
+  }
+
+  List<Widget> _scriptCards() {
+    return [
+      _ScriptCard(
+        title: 'Self Introduction',
+        description: 'A simple introduction speech to help you get started',
+        duration: '2 min',
+        difficulty: ChallengeDifficulty.beginner,
+        language: 'English',
+        onTap: () => _openScript('Self Introduction'),
+      ),
+      const SizedBox(height: 12),
+      _ScriptCard(
+        title: 'Pagpapakilala (Filipino)',
+        description: 'Isang simpleng talumpati para sa pagpapakilala',
+        duration: '2 min',
+        difficulty: ChallengeDifficulty.beginner,
+        language: 'Filipino',
+        onTap: () => _openScript('Pagpapakilala (Filipino)'),
+      ),
+      const SizedBox(height: 12),
+      _ScriptCard(
+        title: 'Product Presentation',
+        description: 'Present a product or service effectively',
+        duration: '5 min',
+        difficulty: ChallengeDifficulty.intermediate,
+        language: 'English',
+        onTap: () => _openScript('Product Presentation'),
+      ),
+      const SizedBox(height: 12),
+      _ScriptCard(
+        title: 'Motivational Speech',
+        description: 'Inspire and motivate your audience',
+        duration: '5 min',
+        difficulty: ChallengeDifficulty.intermediate,
+        language: 'English',
+        onTap: () => _openScript('Motivational Speech'),
+      ),
+      const SizedBox(height: 12),
+      _ScriptCard(
+        title: 'Keynote Address',
+        description: 'Deliver a compelling keynote presentation',
+        duration: '10 min',
+        difficulty: ChallengeDifficulty.advanced,
+        language: 'English',
+        onTap: () => _openScript('Keynote Address'),
+      ),
+    ];
+  }
+
+  // ── Challenges ────────────────────────────────────────────────────────────
+
+  List<Widget> _challengeCards() {
+    return [
+      _ChallengeCard(
+        title: 'Quick Pitch',
+        description: 'Deliver a 60-second elevator pitch about yourself',
+        durationSeconds: 60,
+        difficulty: ChallengeDifficulty.beginner,
+        targetWpm: '120-140 WPM',
+        onTap: () => Navigator.push(context, MaterialPageRoute(
+          builder: (_) => TimedChallengePage(
+            challenge: quickPitchChallenge,
+            onBack: () => Navigator.pop(context),
+            onBackToHome: () => Navigator.popUntil(context, (r) => r.isFirst),
+          ),
+        )),
+      ),
+      const SizedBox(height: 12),
+      _ChallengeCard(
+        title: 'Impromptu Topic',
+        description: 'Speak for 2 minutes on a random topic',
+        durationSeconds: 120,
+        difficulty: ChallengeDifficulty.intermediate,
+        targetWpm: '130-150 WPM',
+        onTap: () => Navigator.push(context, MaterialPageRoute(
+          builder: (_) => TimedChallengePage(
+            challenge: impromptuTopicChallenge,
+            onBack: () => Navigator.pop(context),
+            onBackToHome: () => Navigator.popUntil(context, (r) => r.isFirst),
+          ),
+        )),
+      ),
+      const SizedBox(height: 12),
+      _ChallengeCard(
+        title: 'Clarity Challenge',
+        description: 'Speak for 90 seconds without filler words',
+        durationSeconds: 90,
+        difficulty: ChallengeDifficulty.intermediate,
+        targetWpm: '120-150 WPM',
+        onTap: () => Navigator.push(context, MaterialPageRoute(
+          builder: (_) => TimedChallengePage(
+            challenge: clarityChallengeData,
+            onBack: () => Navigator.pop(context),
+            onBackToHome: () => Navigator.popUntil(context, (r) => r.isFirst),
+          ),
+        )),
+      ),
+      const SizedBox(height: 12),
+      _ChallengeCard(
+        title: 'Speed Round',
+        description: 'Deliver a 3-minute presentation at optimal pace',
+        durationSeconds: 180,
+        difficulty: ChallengeDifficulty.advanced,
+        targetWpm: '140+ WPM',
+        onTap: () => Navigator.push(context, MaterialPageRoute(
+          builder: (_) => TimedChallengePage(
+            challenge: speedRoundChallenge,
+            onBack: () => Navigator.pop(context),
+            onBackToHome: () => Navigator.popUntil(context, (r) => r.isFirst),
+          ),
+        )),
+      ),
+      const SizedBox(height: 12),
+      _ChallengeCard(
+        title: 'Bilingual Switch',
+        description: 'Present in English and Filipino',
+        durationSeconds: 120,
+        difficulty: ChallengeDifficulty.advanced,
+        targetWpm: '120-150 WPM',
+        onTap: () => Navigator.push(context, MaterialPageRoute(
+          builder: (_) => TimedChallengePage(
+            challenge: bilingualSwitchChallenge,
+            onBack: () => Navigator.pop(context),
+            onBackToHome: () => Navigator.popUntil(context, (r) => r.isFirst),
+          ),
+        )),
+      ),
+    ];
+  }
+
+  // ── Guided Tasks ──────────────────────────────────────────────────────────
+
+  List<Widget> _guidedTaskCards() {
+    return [
+      _GuidedTaskCard(
+        title: 'Breathing & Projection',
+        steps: 6, durationMin: 5, category: 'Foundation', icon: Icons.volume_up,
+        onTap: () => _openGuidedTask('Breathing & Projection'),
+      ),
+      const SizedBox(height: 12),
+      _GuidedTaskCard(
+        title: 'Articulation Drills',
+        steps: 6, durationMin: 5, category: 'Clarity', icon: Icons.chat_bubble_outline,
+        onTap: () => _openGuidedTask('Articulation Drills'),
+      ),
+      const SizedBox(height: 12),
+      _GuidedTaskCard(
+        title: 'Pace Control',
+        steps: 6, durationMin: 5, category: 'Timing', icon: Icons.access_time,
+        onTap: () => _openGuidedTask('Pace Control'),
+      ),
+      const SizedBox(height: 12),
+      _GuidedTaskCard(
+        title: 'Energy & Enthusiasm',
+        steps: 6, durationMin: 5, category: 'Delivery', icon: Icons.bolt,
+        onTap: () => _openGuidedTask('Energy & Enthusiasm'),
+      ),
+      const SizedBox(height: 12),
+      _GuidedTaskCard(
+        title: 'Eliminating Fillers',
+        steps: 6, durationMin: 5, category: 'Clarity', icon: Icons.chat_bubble_outline,
+        onTap: () => _openGuidedTask('Eliminating Fillers'),
+      ),
+      const SizedBox(height: 12),
+      _GuidedTaskCard(
+        title: 'Body Language',
+        steps: 6, durationMin: 5, category: 'Presence', icon: Icons.person_outline,
+        onTap: () => _openGuidedTask('Body Language'),
+      ),
+    ];
+  }
+}
+
+// ─── Script Card ──────────────────────────────────────────────────────────────
+
+class _ScriptCard extends StatelessWidget {
+  final String title;
+  final String description;
+  final String duration;
+  final ChallengeDifficulty difficulty;
+  final String language;
+  final VoidCallback? onTap;
+
+  const _ScriptCard({
+    required this.title, required this.description, required this.duration,
+    required this.difficulty, required this.language, this.onTap,
+  });
+
+  Color get _difficultyColor {
+    switch (difficulty) {
+      case ChallengeDifficulty.beginner:     return const Color(0xFF3FBD7A);
+      case ChallengeDifficulty.intermediate: return const Color(0xFF3F7CF4);
+      case ChallengeDifficulty.advanced:     return const Color(0xFFB45FD4);
+    }
+  }
+
+  Color get _difficultyBg {
+    switch (difficulty) {
+      case ChallengeDifficulty.beginner:     return const Color(0xFFDFF5E8);
+      case ChallengeDifficulty.intermediate: return const Color(0xFFE6EEFF);
+      case ChallengeDifficulty.advanced:     return const Color(0xFFF3E6FF);
+    }
+  }
+
+  String get _difficultyLabel {
+    switch (difficulty) {
+      case ChallengeDifficulty.beginner:     return 'Beginner';
+      case ChallengeDifficulty.intermediate: return 'Intermediate';
+      case ChallengeDifficulty.advanced:     return 'Advanced';
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white, borderRadius: BorderRadius.circular(14),
+          boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 8)],
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(title,
+                      style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Color(0xFF1A1A2E))),
+                  const SizedBox(height: 5),
+                  Text(description,
+                      style: const TextStyle(fontSize: 12, color: Colors.grey, height: 1.4)),
+                  const SizedBox(height: 10),
+                  Wrap(
+                    spacing: 8, runSpacing: 6,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      Row(mainAxisSize: MainAxisSize.min, children: [
+                        Icon(Icons.access_time, size: 13, color: Colors.grey.shade500),
+                        const SizedBox(width: 4),
+                        Text(duration, style: TextStyle(fontSize: 12, color: Colors.grey.shade500)),
+                      ]),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                        decoration: BoxDecoration(color: _difficultyBg, borderRadius: BorderRadius.circular(20)),
+                        child: Text(_difficultyLabel,
+                            style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: _difficultyColor)),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                        decoration: BoxDecoration(color: Colors.grey.shade100, borderRadius: BorderRadius.circular(20)),
+                        child: Text(language,
+                            style: TextStyle(fontSize: 11, fontWeight: FontWeight.w500, color: Colors.grey.shade600)),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 8),
+            const Padding(
+              padding: EdgeInsets.only(top: 2),
+              child: Icon(Icons.chevron_right, color: Colors.grey, size: 22),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ─── Guided Task Card ─────────────────────────────────────────────────────────
+
+class _GuidedTaskCard extends StatelessWidget {
+  final String title;
+  final int steps;
+  final int durationMin;
+  final String category;
+  final IconData icon;
+  final VoidCallback? onTap;
+
+  const _GuidedTaskCard({
+    required this.title, required this.steps, required this.durationMin,
+    required this.category, required this.icon, this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white, borderRadius: BorderRadius.circular(14),
+          boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 8)],
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              width: 44, height: 44,
+              decoration: BoxDecoration(color: const Color(0xFFE6EEFF), borderRadius: BorderRadius.circular(12)),
+              child: Icon(icon, color: const Color(0xFF3F7CF4), size: 22),
+            ),
+            const SizedBox(width: 14),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(title,
+                      style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Color(0xFF1A1A2E))),
+                  const SizedBox(height: 3),
+                  Text('$steps steps • $durationMin min',
+                      style: TextStyle(fontSize: 12, color: Colors.grey.shade500)),
+                  const SizedBox(height: 7),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                    decoration: BoxDecoration(color: const Color(0xFFE6EEFF), borderRadius: BorderRadius.circular(20)),
+                    child: Text(category,
+                        style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: Color(0xFF3F7CF4))),
+                  ),
+                ],
+              ),
+            ),
+            const Icon(Icons.chevron_right, color: Colors.grey, size: 22),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ─── Challenge Card ───────────────────────────────────────────────────────────
+
+class _ChallengeCard extends StatelessWidget {
+  final String title;
+  final String description;
+  final int durationSeconds;
+  final ChallengeDifficulty difficulty;
+  final String targetWpm;
+  final VoidCallback? onTap;
+
+  const _ChallengeCard({
+    required this.title, required this.description, required this.durationSeconds,
+    required this.difficulty, required this.targetWpm, this.onTap,
+  });
+
+  Color get _difficultyColor {
+    switch (difficulty) {
+      case ChallengeDifficulty.beginner:     return const Color(0xFF3FBD7A);
+      case ChallengeDifficulty.intermediate: return const Color(0xFF3F7CF4);
+      case ChallengeDifficulty.advanced:     return const Color(0xFFB45FD4);
+    }
+  }
+
+  Color get _difficultyBg {
+    switch (difficulty) {
+      case ChallengeDifficulty.beginner:     return const Color(0xFFDFF5E8);
+      case ChallengeDifficulty.intermediate: return const Color(0xFFE6EEFF);
+      case ChallengeDifficulty.advanced:     return const Color(0xFFF3E6FF);
+    }
+  }
+
+  String get _difficultyLabel {
+    switch (difficulty) {
+      case ChallengeDifficulty.beginner:     return 'Beginner';
+      case ChallengeDifficulty.intermediate: return 'Intermediate';
+      case ChallengeDifficulty.advanced:     return 'Advanced';
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white, borderRadius: BorderRadius.circular(14),
+          boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 8)],
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(title,
+                      style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Color(0xFF1A1A2E))),
+                  const SizedBox(height: 5),
+                  Text(description,
+                      style: const TextStyle(fontSize: 12, color: Colors.grey, height: 1.4)),
+                  const SizedBox(height: 10),
+                  Wrap(
+                    spacing: 8, runSpacing: 6,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      Row(mainAxisSize: MainAxisSize.min, children: [
+                        Icon(Icons.access_time, size: 13, color: Colors.grey.shade500),
+                        const SizedBox(width: 4),
+                        Text('${durationSeconds}s',
+                            style: TextStyle(fontSize: 12, color: Colors.grey.shade500)),
+                      ]),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                        decoration: BoxDecoration(color: _difficultyBg, borderRadius: BorderRadius.circular(20)),
+                        child: Text(_difficultyLabel,
+                            style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: _difficultyColor)),
+                      ),
+                      Row(mainAxisSize: MainAxisSize.min, children: [
+                        Icon(Icons.speed, size: 13, color: Colors.grey.shade500),
+                        const SizedBox(width: 4),
+                        Text('Target: $targetWpm',
+                            style: TextStyle(fontSize: 12, color: Colors.grey.shade500)),
+                      ]),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 12),
+            Container(
+              width: 40, height: 40,
+              decoration: BoxDecoration(color: const Color(0xFF3F7CF4), borderRadius: BorderRadius.circular(12)),
+              child: const Icon(Icons.adjust, color: Colors.white, size: 22),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ═════════════════════════════════════════════════════════════════════════════
+// GUIDED TASK DATA & DETAIL PAGE
+// ═════════════════════════════════════════════════════════════════════════════
+
+class GuidedTaskData {
+  final String title;
+  final String category;
+  final int durationMin;
+  final List<String> steps;
+  final String proTip;
+
+  const GuidedTaskData({
+    required this.title,
+    required this.category,
+    required this.durationMin,
+    required this.steps,
+    required this.proTip,
+  });
+}
+
+final List<GuidedTaskData> guidedTaskLibrary = [
+  const GuidedTaskData(
+    title: 'Breathing & Projection',
+    category: 'Foundation',
+    durationMin: 5,
+    steps: [
+      'Stand up straight with shoulders back',
+      'Take a deep breath from your diaphragm (belly breathing)',
+      'Hold for 3 seconds, then exhale slowly',
+      'Repeat 5 times to relax your vocal cords',
+      'Now practice projecting: Say "Hello everyone" at different volumes',
+      'Focus on speaking from your chest, not your throat',
+    ],
+    proTip: 'Practice this exercise daily for best results. Consistency is key to improving your public speaking skills!',
+  ),
+  const GuidedTaskData(
+    title: 'Articulation Drills',
+    category: 'Clarity',
+    durationMin: 5,
+    steps: [
+      'Relax your jaw by gently opening and closing your mouth 5 times',
+      'Repeat this tongue twister slowly: "Red lorry, yellow lorry"',
+      'Gradually increase speed while maintaining clarity',
+      'Try "Unique New York" 10 times, faster each round',
+      'Read a paragraph aloud, over-enunciating every syllable',
+      'Repeat at normal speed — notice how much clearer you sound',
+    ],
+    proTip: 'Tongue twisters are most effective when done in front of a mirror. Watch your lip and jaw movement for maximum benefit.',
+  ),
+  const GuidedTaskData(
+    title: 'Pace Control',
+    category: 'Timing',
+    durationMin: 5,
+    steps: [
+      'Read a short paragraph at your natural pace',
+      'Time yourself — aim for 130–150 words per minute',
+      'Re-read the same paragraph 20% slower, pausing at commas',
+      'Now read it 20% faster without losing clarity',
+      'Practice inserting deliberate 1-second pauses for emphasis',
+      'Record yourself and compare all three versions',
+    ],
+    proTip: 'Slowing down at key points signals confidence. A well-timed pause is more powerful than rushing to fill silence.',
+  ),
+  const GuidedTaskData(
+    title: 'Energy & Enthusiasm',
+    category: 'Delivery',
+    durationMin: 5,
+    steps: [
+      'Stand up and do 10 jumping jacks to energize your body',
+      'Say "Good morning, everyone!" as if greeting 500 people',
+      'Repeat the same phrase with 50% more energy — smile as you speak',
+      'Pick any sentence and say it with genuine excitement',
+      'Practice varying your pitch: go high on key words, low on others',
+      'Deliver a 30-second intro about yourself with full enthusiasm',
+    ],
+    proTip: 'Your body language drives your vocal energy. Standing tall and smiling physically changes how your voice sounds to listeners.',
+  ),
+  const GuidedTaskData(
+    title: 'Eliminating Fillers',
+    category: 'Clarity',
+    durationMin: 5,
+    steps: [
+      'Speak for 60 seconds on any topic without preparation',
+      'Count every "um", "uh", "like", and "you know" you use',
+      'Repeat the same 60 seconds — replace every filler with silence',
+      'Practice the deliberate pause: when unsure, breathe and wait',
+      'Record yourself and listen back for any remaining fillers',
+      'Do one final 60-second attempt targeting zero fillers',
+    ],
+    proTip: 'Fillers appear when your brain needs time to think. Pausing silently instead makes you sound far more authoritative.',
+  ),
+  const GuidedTaskData(
+    title: 'Body Language',
+    category: 'Presence',
+    durationMin: 5,
+    steps: [
+      'Stand in front of a mirror in your natural speaking posture',
+      'Correct your stance: feet shoulder-width, weight evenly distributed',
+      'Practice open gestures — keep hands visible, avoid crossing arms',
+      'Rehearse deliberate hand movements that match your words',
+      'Make eye contact with yourself in the mirror for 10 seconds',
+      'Deliver a 30-second speech using everything you have practiced',
+    ],
+    proTip: '55% of communication is body language. Even on a call, standing straight and gesturing improves how you sound.',
+  ),
+];
+
+// ─── Guided Task Detail Page ──────────────────────────────────────────────────
+
+class GuidedTaskDetailPage extends StatelessWidget {
+  final GuidedTaskData task;
+
+  const GuidedTaskDetailPage({super.key, required this.task});
+
+  static const _kPrimary      = Color(0xFF3F7CF4);
+  static const _kPrimaryLight = Color(0xFFE6EEFF);
+  static const _kTextDark     = Color(0xFF1A1A2E);
+  static const _kBgGrey       = Color(0xFFF2F4F7);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: _kBgGrey,
+      body: Column(
+        children: [
+          _buildHeader(context),
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.only(bottom: 24),
+              child: Column(
+                children: [
+                  _buildStepGuideCard(),
+                  _buildProTipCard(),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildHeader(BuildContext context) {
+    return Container(
+      color: _kPrimary,
+      padding: EdgeInsets.only(
+        top: MediaQuery.of(context).padding.top + 12,
+        left: 20, right: 20, bottom: 22,
+      ),
+      width: double.infinity,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          GestureDetector(
+            onTap: () => Navigator.pop(context),
+            child: const Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.chevron_left, color: Colors.white70, size: 20),
+                SizedBox(width: 2),
+                Text('Back', style: TextStyle(color: Colors.white70, fontSize: 13)),
+              ],
+            ),
+          ),
+          const SizedBox(height: 10),
+          Text(task.title,
+              style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w700)),
+          const SizedBox(height: 4),
+          Text('${task.category} • ${task.durationMin} min',
+              style: const TextStyle(color: Colors.white70, fontSize: 13)),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStepGuideCard() {
+    return Container(
+      margin: const EdgeInsets.fromLTRB(12, 14, 12, 10),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(14),
+        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.06), blurRadius: 6, offset: const Offset(0, 2))],
+      ),
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Row(
+            children: [
+              Icon(Icons.menu_book_rounded, color: _kPrimary, size: 20),
+              SizedBox(width: 8),
+              Text('Step-by-Step Guide',
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: _kTextDark)),
+            ],
+          ),
+          const SizedBox(height: 16),
+          ...task.steps.asMap().entries.map((e) => _buildStepRow(e.key + 1, e.value)),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStepRow(int number, String text) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 14),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: 26, height: 26,
+            decoration: const BoxDecoration(color: _kPrimary, shape: BoxShape.circle),
+            alignment: Alignment.center,
+            child: Text('$number',
+                style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w700)),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 4),
+              child: Text(text,
+                  style: const TextStyle(fontSize: 13.5, color: Color(0xFF333333), height: 1.45)),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildProTipCard() {
+    return Container(
+      margin: const EdgeInsets.fromLTRB(12, 0, 12, 14),
+      decoration: BoxDecoration(color: _kPrimaryLight, borderRadius: BorderRadius.circular(14)),
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(Icons.star_rounded, color: Colors.amber[600], size: 18),
+              const SizedBox(width: 6),
+              const Text('Pro Tip',
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: Color(0xFF2A5BD7))),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Text(task.proTip,
+              style: const TextStyle(fontSize: 12.5, color: Color(0xFF444444), height: 1.5)),
+        ],
+      ),
+    );
+  }
+}
